@@ -1,0 +1,97 @@
+#!/bin/bash
+#希望你能尊重开发者的作品如果您转载请【保留本版权信息】
+#Loli分享论坛 https://moecat.cn
+#雾子の博客 https://kiriko.org
+# ps -e -o 'comm,pcpu,rsz'|grep kangle|awk '{sum += $3} END{print sum}'获取内存显示
+# ps -e -o 'comm,pcpu,rsz'|grep kangle|awk '{sum += $2} END{print sum}'获取CPU百分百显示
+#————————————————————————————————————————
+# Copyright © 2018-2019 雾子脚本版权所有
+#————————————————————————————————————————
+OS=`uname`;
+IO="" # store IP
+mpw=`date +%D%s%N | md5sum | head -c 10`
+day=`date +%Y`
+dayT=`date +%T`
+DOWNLOAD_URL="http://download.umaru.uk"
+case $OS in
+Linux) IP=`curl -s http://ipinfo.io/|grep 'ip'|sed -n '1p'|cut -d '"' -f4`;;
+FreeBSD|OpenBSD) IP=`curl -s http://ipinfo.io/|grep 'ip'|sed -n '1p'|cut -d '"' -f4` ;;
+SunOS) IP=`curl -s http://ipinfo.io/|grep 'ip'|sed -n '1p'|cut -d '"' -f4` ;;
+*) IP="Unknown";;
+esac
+
+ipget=`curl -s https://www.hlshell.com/ip/?ip=$IP`
+
+LOGO="    \033[32m开源|免费|绿色|安全|高效|零后门|零木马|零监控| \033[0m
+————————————————————————————————————————————————————
+Copyright © 2018-"$day"   $dayT   Ver:3.0   Add:$ipget
+	   书记脚本.为服务器环境而生 "
+echo -e "nameserver 114.114.114.114\nnameserver 8.8.8.8" >> /etc/resolv.conf
+{
+clear
+clear
+clear
+clear
+clear
+clear
+echo -ne "$LOGO
+————————————————————————————————————————————————————
+	  \033[36m书记脚本合作伙伴链接 \033[0m
+	       None - None
+	       None - None
+————————————————————————————————————————————————————
+   本脚本兼容 Centos 7 Debian Ubuntu
+   如果您不想安装书记脚本请按下\033[33m Enter \033[0m键确认
+   如果您对书记脚本信任
+   输入\033[33mi \033[0m\033[36m选择安装宝塔开心脚本\033[0m
+————————————————————————————————————————————————————
+	雾子の博客|https://www.kiriko.org
+	Loli 分享论坛|https://www.moecat.cn
+————————————————————————————————————————————————————
+请输入\033[33mi\033[0m并按下\033[33mEnter\033[0m键确认自动安装:"
+input_enter=""
+read -p "" input_enter	
+if [ "$input_enter" = "i" ];
+then
+{
+
+clear
+read -p "Centos 面板 请选择c ，Ubuntu 面板 请选择u ，Debian 面板 请选择d ，已安装面板 请选择y:" np
+
+if [[ "${np}" == "c" ]]; then
+	wget -O install.sh $DOWNLOAD_URL/install/install_6.0.sh && sh install.sh
+elif [[ "${np}" == "u" ]]; then
+	wget -O install.sh $DOWNLOAD_URL/install/install-ubuntu_6.0.sh && sudo bash install.sh
+elif [[ "${np}" == "d" ]]; then
+	wget -O install.sh $DOWNLOAD_URL/install/install-ubuntu_6.0.sh && bash install.sh
+elif [[ "${np}" == "y" ]]; then
+	curl $DOWNLOAD_URL/install/update6.sh|bash
+else
+	clear
+	exit 1
+fi	
+
+if [ $? != 0 ];then
+exit $?
+else
+sleep 2
+fi
+}
+else
+{
+clear
+clear
+clear
+clear
+clear
+clear
+echo -e "$LOGO
+————————————————————————————————————————————————————
+	很抱歉书记脚本没能安装到您的服务器	
+	感谢您对书记脚本的支持,欢迎再次使用.
+————————————————————————————————————————————————————"	
+rm -rf Bt_Panel_Pro
+}
+fi
+}
+
